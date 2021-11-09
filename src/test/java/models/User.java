@@ -1,13 +1,18 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 public class User {
     private int id;
     private String name;
     private String username;
     private String email;
+    @JsonSerialize(as = Address.class)
     private Address address;
     private String phone;
     private String website;
+    @JsonSerialize(as = Company.class)
     private Company company;
 
     public int getId() {
@@ -65,40 +70,40 @@ public class User {
     public void setCompany(Company company) {
         this.company = company;
     }
-
+    @JsonIgnore
     public String getCompanyName() {
         return company.getName();
     }
-
+    @JsonIgnore
     public String getCompanyCatchPhrase() {
         return company.getCatchPhrase();
     }
-
+    @JsonIgnore
     public String getCompanyBs() {
         return company.getBs();
     }
-
+    @JsonIgnore
     public String getStreet() {
         return address.getStreet();
     }
-
+    @JsonIgnore
     public String getSuite() {
         return address.getSuite();
     }
-
+    @JsonIgnore
     public String getCity() {
         return address.getCity();
     }
-
+    @JsonIgnore
     public String getZipcode() {
         return address.getZipcode();
     }
-
-    public double getLat() {
+    @JsonIgnore
+    public String getLat() {
         return address.getLat();
     }
-
-    public double getLng() {
+    @JsonIgnore
+    public String getLng() {
         return address.getLng();
     }
 

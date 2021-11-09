@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Map;
 
 public class Address {
@@ -7,7 +9,7 @@ public class Address {
     private String suite;
     private String city;
     private String zipcode;
-    private Map<String, Double> geo;
+    private Map<String, String> geo;
 
     public String getStreet() {
         return street;
@@ -40,17 +42,21 @@ public class Address {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
-
-    public double getLat() {
+    @JsonIgnore
+    public String getLat() {
         return geo.get("lat");
     }
-
-    public double getLng() {
+    @JsonIgnore
+    public String getLng() {
         return geo.get("lng");
     }
 
-    public void setGeo(Map<String, Double> geo) {
+    public void setGeo(Map<String, String> geo) {
         this.geo = geo;
+    }
+
+    public Map<String, String> getGeo() {
+        return geo;
     }
 
     @Override

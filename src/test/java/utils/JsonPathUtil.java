@@ -4,7 +4,7 @@ import io.restassured.path.json.JsonPath;
 import models.Post;
 import models.User;
 
-import java.io.File;
+import java.io.*;
 
 public class JsonPathUtil {
 
@@ -15,4 +15,5 @@ public class JsonPathUtil {
     public static User getUserByFile(String fileName) {
         return JsonPath.from(new File(fileName)).getObject(".", User.class);
     }
+
 }
