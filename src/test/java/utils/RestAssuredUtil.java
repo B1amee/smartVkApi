@@ -15,6 +15,8 @@ import static io.restassured.RestAssured.*;
 public class RestAssuredUtil {
     private static RestAssuredUtil instance;
 
+    private static String url;
+
     private Response resp;
 
     public static RestAssuredUtil getInstance() {
@@ -26,9 +28,12 @@ public class RestAssuredUtil {
 
     private static void init() {
         instance = new RestAssuredUtil();
-        String url = ConfigManager.getProperties("url");
         LoggerUtil.info(RestAssuredUtil.class, "Init to url: " + url);
         requestSpecification = new RequestSpecBuilder().setBaseUri(url).build();
+    }
+
+    public static void setUrl(String url) {
+        RestAssuredUtil.url = url;
     }
 
     public List<Post> getAllPosts(String path) {

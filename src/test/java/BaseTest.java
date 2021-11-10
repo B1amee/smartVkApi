@@ -1,4 +1,11 @@
+import org.testng.annotations.BeforeTest;
+import utils.ConfigManager;
+import utils.RestAssuredUtil;
 
 public abstract class BaseTest {
-    // There is nothing here at this time, but it is possible there will be
+
+    @BeforeTest
+    public void setUp() {
+        RestAssuredUtil.setUrl(ConfigManager.getProperties("url"));
+    }
 }
