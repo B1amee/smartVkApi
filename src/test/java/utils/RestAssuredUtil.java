@@ -33,8 +33,7 @@ public class RestAssuredUtil {
 
     public List<Post> getAllPosts(String path) {
         resp = get(path);
-        return resp.as(new TypeRef<>() {
-        });
+        return resp.as(new TypeRef<List<Post>>() {});
     }
 
     public Post getPostByPath(String path) {
@@ -66,7 +65,7 @@ public class RestAssuredUtil {
 
     public List<User> getAllUsers(String path) {
         resp = get(path);
-        return resp.as(new TypeRef<>() {
+        return resp.as(new TypeRef<List<User>>() {
         });
     }
 
