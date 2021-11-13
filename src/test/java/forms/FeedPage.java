@@ -8,7 +8,7 @@ public class FeedPage extends Form {
 
     private final IButton myPage = getElementFactory().getButton(By.xpath("//*[@id='l_pr']"), "My Page");
 
-    protected FeedPage() {
+    public FeedPage() {
         super(By.xpath("//*[@id='l_pr']"), "Feed page");
     }
 
