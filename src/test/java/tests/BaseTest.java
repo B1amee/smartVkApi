@@ -2,10 +2,13 @@ package tests;
 
 import aquality.selenium.browser.AqualityServices;
 import aquality.selenium.browser.Browser;
+import aquality.selenium.core.logging.Logger;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 
 public class BaseTest {
+
+    protected final Logger log = Logger.getInstance();
 
     @BeforeTest
     public void beforeTest() {
