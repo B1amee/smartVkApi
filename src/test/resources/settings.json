@@ -1,9 +1,8 @@
 {
-  "browserName" : "chrome",
+  "browserName": "chrome",
   "isRemote": false,
   "remoteConnectionUrl": "http://localhost:4444/wd/hub",
-  "isElementHighlightEnabled" : true,
-
+  "isElementHighlightEnabled": true,
   "driverSettings": {
     "chrome": {
       "webDriverVersion": "latest",
@@ -54,10 +53,10 @@
     }
   },
   "timeouts": {
-    "timeoutImplicit" : 0,
-    "timeoutCondition" : 25,
-    "timeoutScript" : 10,
-    "timeoutPageLoad" : 60,
+    "timeoutImplicit": 0,
+    "timeoutCondition": 25,
+    "timeoutScript": 10,
+    "timeoutPageLoad": 60,
     "timeoutPollingInterval": 300,
     "timeoutCommand": 120
   },

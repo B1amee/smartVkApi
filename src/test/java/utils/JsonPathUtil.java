@@ -2,6 +2,8 @@ package utils;
 
 import aquality.selenium.core.logging.Logger;
 
+import java.util.List;
+
 import static io.restassured.path.json.JsonPath.*;
 
 
@@ -9,15 +11,15 @@ public class JsonPathUtil {
 
     private static final Logger log = Logger.getInstance();
 
-    public static String getPostByBody(String body, String key) {
-        log.info("Get post id from " + body);
+    public static String getValueByBody(String body, String key) {
+        log.info("Get key id from " + body);
         return from(body).getString(key);
     }
 
-    public static String getPostId(String body) {
-        log.info("Get post id from " + body);
+    public static List<String> getListByBody(String body, String key) {
+        log.info("Get list id from " + body);
 
-        return from(body).getString("post_id");
+        return from(body).getList(key, String.class);
     }
 
     public static int getDeleteCode(String body) {

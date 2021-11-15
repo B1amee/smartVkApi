@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 import static io.restassured.RestAssured.*;
 
@@ -50,13 +51,12 @@ public class VkAPIUtils {
         this.token = token;
     }
 
-    //  https://oauth.vk.com/authorize?client_id=7693362&display=page&scope=wall&response_type=token&v=5.92&state=123456
-    // wall.post?owner_id=627657327&message=bdate
+    // https://oauth.vk.com/authorize?client_id=7693362&display=page&scope=wall,photos&response_type=token&v=5.92&state=123456
     public String createPost(String randomText) {
         String request = String.format("/wall.post?owner_id=%s&message=\"%s\"&access_token=%s&v=%s", ownerId, randomText, token, v);
         log.info("Request " + request);
         resp = post(request);
-        return JsonPathUtil.getPostByBody(resp.body().asString(), "response.post_id");
+        return JsonPathUtil.getValueByBody(resp.body().asString(), "response.post_id");
     }
 
     public int deletePost(String postId) {
@@ -69,7 +69,7 @@ public class VkAPIUtils {
     public String savePhoto() {
         String request = String.format("/photos.getWallUploadServer?owner_id=%s&access_token=%s&v=%s", ownerId, token, v);
         resp = given().post(request);
-        String uploadUrl = JsonPathUtil.getPostByBody(resp.body().asString(), "response.upload_url");
+        String uploadUrl = JsonPathUtil.getValueByBody(resp.body().asString(), "response.upload_url");
         log.info("Url " + uploadUrl);
         File file = new File(jsonDataFile.getValue("/photo_file").toString());
         try {
@@ -77,12 +77,12 @@ public class VkAPIUtils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        String server = JsonPathUtil.getPostByBody(resp.asString(), "server");
-        String photo = JsonPathUtil.getPostByBody(resp.asString(), "photo");
-        String hash = JsonPathUtil.getPostByBody(resp.asString(), "hash");
+        String server = JsonPathUtil.getValueByBody(resp.asString(), "server");
+        String photo = JsonPathUtil.getValueByBody(resp.asString(), "photo");
+        String hash = JsonPathUtil.getValueByBody(resp.asString(), "hash");
         request = String.format("/photos.saveWallPhoto?user_id=%s&server=%s&hash=%s&access_token=%s&v=%s", ownerId, server, hash, token, v);
         resp = given().queryParam("photo", photo).post(request);
-        return JsonPathUtil.getPostByBody(resp.asString(), "response.id");
+        return JsonPathUtil.getValueByBody(resp.asString(), "response.id");
     }
 
     public String editPost(String postId, String randomText, String photoId) {
@@ -91,8 +91,8 @@ public class VkAPIUtils {
         log.info("Request " + request);
         resp = post(request);
         if (resp.body().asString().contains("Captcha needed")) {
-            AqualityServices.getBrowser().goTo(JsonPathUtil.getPostByBody(resp.asString(), "captcha_img"));
-            String sid = JsonPathUtil.getPostByBody(resp.asString(), "captcha_sid");
+            AqualityServices.getBrowser().goTo(JsonPathUtil.getValueByBody(resp.asString(), "captcha_img"));
+            String sid = JsonPathUtil.getValueByBody(resp.asString(), "captcha_sid");
             String captcha_img = null;
             try {
                 captcha_img = new BufferedReader(new InputStreamReader(System.in)).readLine();
@@ -103,6 +103,19 @@ public class VkAPIUtils {
                     .format("/wall.edit?post_id=%s&message=\"%s\"&attachments=%s&captcha_sid=%s&captcha_key=%s&access_token=%s&v=%s", postId, randomText, fullPhotoId, sid, captcha_img, token, v);
             resp = post(request);
         }
-        return JsonPathUtil.getPostByBody(resp.body().asString(), "post_id");
+        return JsonPathUtil.getValueByBody(resp.body().asString(), "post_id");
     }
+
+    public String createComment(String postId, String randomText) {
+        String request = String.format("/wall.createComment?owner_id=%s&post_id=%s&message=%s&access_token=%s&v=%s", ownerId, postId, randomText, token, v);
+        resp = given().post(request);
+        return JsonPathUtil.getValueByBody(resp.body().asString(), "comment_id");
+    }
+
+    public List<String> getLikes(String postId) {
+        String request = String.format("/likes.getList?owner_id=%s&item_id=%s&type=post&access_token=%s&v=%s", ownerId, postId, token, v);
+        resp = given().post(request);
+        return JsonPathUtil.getListByBody(resp.asString(), "response.items");
+    }
+
 }
