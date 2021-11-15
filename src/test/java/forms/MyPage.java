@@ -20,8 +20,6 @@ public class MyPage extends Form {
             .getLink(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@href,'/photo')]"), "Photo link");
     private final IButton postLikeBtm = getElementFactory()
             .getButton(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@class,'like_btn like')]"), "Like button");
-    private final IButton postCommentBtm = getElementFactory()
-            .getButton(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@class,'like_btn comment')]"), "Like button");
     private final ILabel comment = getElementFactory()
             .getLabel(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@id,\"post\")][1]"), "Comment post");
     private final IButton nextComment = getElementFactory()
@@ -39,8 +37,8 @@ public class MyPage extends Form {
         return VkAPIUtils.getInstance().savePhoto().replaceAll("\\[", "").replaceAll("]", "");
     }
 
-    public String editPost(String postId, String randomText, String photoId) {
-        return VkAPIUtils.getInstance().editPost(postId, randomText, photoId);
+    public void editPost(String postId, String randomText, String photoId) {
+        VkAPIUtils.getInstance().editPost(postId, randomText, photoId);
     }
 
     public String getPostId() {
@@ -55,16 +53,16 @@ public class MyPage extends Form {
         return photo.getAttribute("data-photo-id");
     }
 
-    public int deletePost(String postId) {
-        return VkAPIUtils.getInstance().deletePost(postId);
+    public void deletePost(String postId) {
+        VkAPIUtils.getInstance().deletePost(postId);
     }
 
     public String getCommentAuthorId() {
         return comment.getAttribute("data-answering-id");
     }
 
-    public String createComment(String postId, String text) {
-        return VkAPIUtils.getInstance().createComment(postId, text);
+    public void createComment(String postId, String text) {
+        VkAPIUtils.getInstance().createComment(postId, text);
     }
 
     public void clickCommentBtm() {

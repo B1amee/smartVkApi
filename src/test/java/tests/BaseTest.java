@@ -18,7 +18,9 @@ public class BaseTest {
 
     @AfterTest
     public void afterTest() {
-        getBrowser().quit();
+        if (AqualityServices.isBrowserStarted()) {
+            getBrowser().quit();
+        }
     }
 
     private Browser getBrowser() {

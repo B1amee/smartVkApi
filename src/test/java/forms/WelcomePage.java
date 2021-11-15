@@ -1,8 +1,6 @@
 package forms;
 
-import aquality.selenium.elements.Button;
 import aquality.selenium.elements.interfaces.IButton;
-import aquality.selenium.elements.interfaces.IElementFactory;
 import aquality.selenium.elements.interfaces.ITextBox;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
