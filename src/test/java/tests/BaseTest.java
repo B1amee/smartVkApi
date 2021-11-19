@@ -1,10 +1,11 @@
 package tests;
 
-import aquality.selenium.browser.AqualityServices;
-import aquality.selenium.browser.Browser;
 import aquality.selenium.core.logging.Logger;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import utils.BrowserUtil;
+import utils.DataManager;
+
 
 public class BaseTest {
 
@@ -12,18 +13,14 @@ public class BaseTest {
 
     @BeforeTest
     public void beforeTest() {
-        getBrowser().goTo("https://vk.com/");
-        getBrowser().waitForPageToLoad();
+        String url = DataManager.getValue("/url");
+        BrowserUtil.goTo(url);
+        BrowserUtil.waitForPageToLoad();
     }
 
     @AfterTest
     public void afterTest() {
-        if (AqualityServices.isBrowserStarted()) {
-            getBrowser().quit();
-        }
+        BrowserUtil.quit();
     }
 
-    private Browser getBrowser() {
-        return AqualityServices.getBrowser();
-    }
 }

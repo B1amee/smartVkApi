@@ -5,40 +5,40 @@ import aquality.selenium.elements.interfaces.ILabel;
 import aquality.selenium.elements.interfaces.ILink;
 import aquality.selenium.elements.interfaces.ITextBox;
 import aquality.selenium.forms.Form;
+import models.VkPost;
+import models.photo.VkPhoto;
 import org.openqa.selenium.By;
-import utils.VkAPIUtils;
+import utils.*;
 
 import java.util.List;
 
 public class MyPage extends Form {
 
-    private final ILabel post = getElementFactory()
-            .getLabel(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]"), "First post");
-    private final ITextBox postText = getElementFactory()
-            .getTextBox(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@class,'wall_post_text')]"), "First post text");
-    private final ILink photo = getElementFactory()
-            .getLink(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@href,'/photo')]"), "Photo link");
-    private final IButton postLikeBtm = getElementFactory()
-            .getButton(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@class,'like_btn like')]"), "Like button");
-    private final ILabel comment = getElementFactory()
-            .getLabel(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')][1]//*[contains(@id,\"post\")][1]"), "Comment post");
-    private final IButton nextComment = getElementFactory()
-            .getButton(By.xpath("//*[@class='js-replies_next_label']"), "Next comment button");
+    private static final By locator = By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')]");
+
+    private final String patten = "//*[@id='page_wall_posts']//*[contains(@id,'post')][1]%s";
+
+    private final ILabel post = getElementFactory().getLabel(By.xpath(String.format(patten, "")), "First post");
+    private final ITextBox postText = getElementFactory().getTextBox(By.xpath(String.format(patten, "//*[contains(@class,'wall_post_text')]")), "First post text");
+    private final ILink photo = getElementFactory().getLink(By.xpath(String.format(patten, "//*[contains(@href,'/photo')]")), "Photo link");
+    private final IButton postLikeBtm = getElementFactory().getButton(By.xpath(String.format(patten, "//*[contains(@class,'like_btn like')]")), "Like button");
+    private final ILabel comment = getElementFactory().getLabel(By.xpath(String.format(patten, "//*[contains(@id,\"post\")][1]")), "Comment post");
+    private final IButton nextComment = getElementFactory().getButton(By.xpath("//*[@class='js-replies_next_label']"), "Next comment button");
 
     public MyPage() {
-        super(By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')]"), "My page");
+        super(locator, "My page");
     }
 
-    public String createPost(String text) {
-        return VkAPIUtils.getInstance().createPost(text);
+    public VkPost createPost(String text) {
+        return VkPostUtil.createPost(text);
     }
 
-    public String savePhoto() {
-        return VkAPIUtils.getInstance().savePhoto().replaceAll("\\[", "").replaceAll("]", "");
+    public List<VkPhoto> savePhoto() {
+        return VkPhotoUtil.savePhoto();
     }
 
-    public void editPost(String postId, String randomText, String photoId) {
-        VkAPIUtils.getInstance().editPost(postId, randomText, photoId);
+    public void editPost(VkPost vkPost, String randomText, VkPhoto vkPhoto) {
+        VkPostUtil.editPost(vkPost, randomText, vkPhoto);
     }
 
     public String getPostId() {
@@ -53,16 +53,16 @@ public class MyPage extends Form {
         return photo.getAttribute("data-photo-id");
     }
 
-    public void deletePost(String postId) {
-        VkAPIUtils.getInstance().deletePost(postId);
+    public String deletePost(VkPost vkPost) {
+        return VkPostUtil.deletePost(vkPost);
     }
 
     public String getCommentAuthorId() {
         return comment.getAttribute("data-answering-id");
     }
 
-    public void createComment(String postId, String text) {
-        VkAPIUtils.getInstance().createComment(postId, text);
+    public void createComment(VkPost vkPost, String text) {
+        VkCommentUtil.createComment(vkPost, text);
     }
 
     public void clickCommentBtm() {
@@ -73,7 +73,7 @@ public class MyPage extends Form {
         postLikeBtm.clickAndWait();
     }
 
-    public List<String> getLikes(String postId) {
-        return VkAPIUtils.getInstance().getLikes(postId);
+    public List<String> getLikes(VkPost vkPost) {
+        return VkLikesUtil.getPostLikes(vkPost);
     }
 }
