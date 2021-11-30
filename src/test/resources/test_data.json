@@ -1,7 +1,7 @@
 {
   "url": "https://vk.com/",
   "api_url": "https://api.vk.com/method",
-  "token": "39c3c9955cc14487c74bb6d8c6460e6e721002873530190696ce5b2393e20ef08106270015a896d0bf4c1",
+  "token": "1f11fa5fa4608ad3114481b87f8169405f14d4523b61be7f5a04c67e6c6429ac6fc35df61d3baeb2b7df6",
   "photo_file": "./src/test/resources/photo.jpg",
   "v": "5.131",
   "owner_id": "627657327",

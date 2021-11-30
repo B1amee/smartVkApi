@@ -24,6 +24,8 @@ public class MyPage extends Form {
     private final IButton postLikeBtm = getElementFactory().getButton(By.xpath(String.format(patten, "//*[contains(@class,'like_btn like')]")), "Like button");
     private final ILabel comment = getElementFactory().getLabel(By.xpath(String.format(patten, "//*[contains(@id,\"post\")][1]")), "Comment post");
     private final IButton nextComment = getElementFactory().getButton(By.xpath("//*[@class='js-replies_next_label']"), "Next comment button");
+    private final ILink photoSrc = getElementFactory().getLink(By.xpath("//*[@id='pv_photo']//img[@src]"), "Photo src");
+    private final IButton photoClose = getElementFactory().getButton(By.xpath("//*[@class='pv_close_btn']"), "Photo src");
 
     public MyPage() {
         super(locator, "My page");
@@ -51,6 +53,15 @@ public class MyPage extends Form {
 
     public String getPhotoId() {
         return photo.getAttribute("data-photo-id");
+    }
+
+    public String getPhotoUrl() {
+        photo.clickAndWait();
+        return photoSrc.getAttribute("src");
+    }
+
+    public void closePhoto() {
+        photoClose.clickAndWait();
     }
 
     public String deletePost(VkPost vkPost) {

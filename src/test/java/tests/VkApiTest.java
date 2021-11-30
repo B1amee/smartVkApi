@@ -9,7 +9,10 @@ import models.VkPost;
 import models.photo.VkPhoto;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
+import utils.DataManager;
+import utils.OpenCvUtil;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.testng.Assert.*;
@@ -17,7 +20,7 @@ import static org.testng.Assert.*;
 public class VkApiTest extends BaseTest {
 
     @Test(priority = 1)
-    public void testVkApi() {
+    public void testVkApi() throws IOException {
         log.info("Step 1: go to https://vk.com/");
         WelcomePage welcomePage = new WelcomePage();
         assertTrue(welcomePage.state().waitForDisplayed(), "Welcome Page is not open");
@@ -65,6 +68,10 @@ public class VkApiTest extends BaseTest {
         String actPhotoId = myPage.getPhotoId();
         assertEquals(myPage.getPostText(), randomText, "Edit post text not equals");
         assertTrue(actPhotoId.contains(String.valueOf(expPhoto.getId())), "Photo is incorrect");
+        String expPhotoPath = DataManager.getValue("/photo_file");
+        String actPhotoPath = myPage.getPhotoUrl();
+        assertTrue(OpenCvUtil.checkPhoto(actPhotoPath, expPhotoPath), "Photo src is incorrect");
+        myPage.closePhoto();
         log.info("Step 7: complete");
 
         log.info("Step 8: Using API request, create comment with random text");
