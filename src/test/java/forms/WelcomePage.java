@@ -5,7 +5,7 @@ import aquality.selenium.elements.interfaces.ITextBox;
 import aquality.selenium.forms.Form;
 import org.openqa.selenium.By;
 
-public class WelcomePage extends Form {
+public class WelcomePage extends BaseForm {
 
     private static final By locator = By.xpath("//*[@id='index_email']");
 

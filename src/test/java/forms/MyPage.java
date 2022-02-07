@@ -12,7 +12,7 @@ import utils.*;
 
 import java.util.List;
 
-public class MyPage extends Form {
+public class MyPage extends BaseForm {
 
     private static final By locator = By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')]");
 

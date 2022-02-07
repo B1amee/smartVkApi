@@ -47,9 +47,10 @@
             <version>2.13.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.aquality-automation</groupId>
-            <artifactId>aquality-selenium</artifactId>
-            <version>LATEST</version>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>6.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.openpnp</groupId>
