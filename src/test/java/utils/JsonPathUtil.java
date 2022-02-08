@@ -1,20 +1,22 @@
 package utils;
 
-import aquality.selenium.core.logging.Logger;
 import models.VkLikes;
 import models.photo.VkPhoto;
 import models.photo.VkPhotoPost;
 import models.photo.VkPhotoUpload;
 import models.VkPost;
+import org.testng.log4testng.Logger;
 
+import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import static io.restassured.path.json.JsonPath.*;
 
 
 public class JsonPathUtil {
 
-    private static final Logger log = Logger.getInstance();
+    private static final Logger log = Logger.getLogger(JsonPathUtil.class);
 
     public static String getValueByBody(String body, String key) {
         log.info("Get " + key + " id from " + body);
@@ -52,4 +54,7 @@ public class JsonPathUtil {
         return from(body).getList(path, VkPhoto.class);
     }
 
+    public static Map<String, String> getMap(File file, String path) {
+        return from(file).getMap(path);
+    }
 }

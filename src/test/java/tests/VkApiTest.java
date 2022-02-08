@@ -1,7 +1,5 @@
 package tests;
 
-import aquality.selenium.core.utilities.ISettingsFile;
-import aquality.selenium.core.utilities.JsonSettingsFile;
 import forms.FeedPage;
 import forms.MyPage;
 import forms.WelcomePage;
@@ -23,34 +21,33 @@ public class VkApiTest extends BaseTest {
     public void testVkApi() throws IOException {
         log.info("Step 1: go to https://vk.com/");
         WelcomePage welcomePage = new WelcomePage();
-        assertTrue(welcomePage.state().waitForDisplayed(), "Welcome Page is not open");
+        assertTrue(welcomePage.isDisplayed(), "Welcome Page is not open");
         log.info("Step 1: complete");
 
-        ISettingsFile jsonDataFile = new JsonSettingsFile("test_data.json");
 
         log.info("Step 2: Authorize");
-        String login = jsonDataFile.getValue("/login").toString();
-        String password = jsonDataFile.getValue("/password").toString();
+        String login = DataManager.getValue("login");
+        String password = DataManager.getValue("password");
         welcomePage.setLoginAndPassword(login, password);
         welcomePage.clickSignInBtm();
         FeedPage feedPage = new FeedPage();
-        assertTrue(feedPage.state().waitForDisplayed(), "Feed Page is not open");
+        assertTrue(feedPage.isDisplayed(), "Feed Page is not open");
         log.info("Step 2: complete");
 
         log.info("Step 3: go to My page");
         feedPage.clickMyPage();
         MyPage myPage = new MyPage();
-        assertTrue(myPage.state().waitForDisplayed(), "My page is not open");
+        assertTrue(myPage.isDisplayed(), "My page is not open");
         log.info("Step 3: complete");
 
         log.info("Step 4: Using API request, create Post with random text and get post id from response");
-        String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(jsonDataFile.getValue("/letter_count").toString()));
+        String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
         VkPost vkPost = myPage.createPost(randomText);
         assertNotNull(vkPost, "Post do not created");
         log.info("Step 4: complete");
 
         log.info("Step 5: Check wall to find new post from correct user, without refresh the page");
-        String userId = jsonDataFile.getValue("/owner_id").toString();
+        String userId = DataManager.getValue("owner_id");
         String fullPostId = myPage.getPostId();
         String postText = myPage.getPostText();
         assertEquals(postText, randomText, "Post text not equals");
@@ -59,7 +56,7 @@ public class VkApiTest extends BaseTest {
         log.info("Step 5: complete");
 
         log.info("Step 6: Edit post with API request, change text and add new photo in the post");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(jsonDataFile.getValue("/letter_count").toString()));
+        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
         VkPhoto expPhoto = myPage.savePhoto().get(0);
         myPage.editPost(vkPost, randomText, expPhoto);
         log.info("Step 6: complete");
@@ -68,14 +65,14 @@ public class VkApiTest extends BaseTest {
         String actPhotoId = myPage.getPhotoId();
         assertEquals(myPage.getPostText(), randomText, "Edit post text not equals");
         assertTrue(actPhotoId.contains(String.valueOf(expPhoto.getId())), "Photo is incorrect");
-        String expPhotoPath = DataManager.getValue("/photo_file");
+        String expPhotoPath = DataManager.getValue("photo_file");
         String actPhotoPath = myPage.getPhotoUrl();
         assertTrue(OpenCvUtil.checkPhoto(actPhotoPath, expPhotoPath), "Photo src is incorrect");
         myPage.closePhoto();
         log.info("Step 7: complete");
 
         log.info("Step 8: Using API request, create comment with random text");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(jsonDataFile.getValue("/letter_count").toString()));
+        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
         myPage.createComment(vkPost, randomText);
         log.info("Step 8: complete");
 
@@ -99,8 +96,7 @@ public class VkApiTest extends BaseTest {
         log.info("Step 12: complete");
 
         log.info("Step 13: Make sure that a post has been deleted, without refresh the page");
-        String actualPostId = myPage.getPostId();
-        assertNotEquals(actualPostId, String.valueOf(vkPost.getPostId()), "Post not delete");
+        assertFalse(myPage.isPostDisplayed(), "Post not delete");
         log.info("Step 13: complete");
     }
 }

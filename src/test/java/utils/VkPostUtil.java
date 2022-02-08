@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import static com.codeborne.selenide.Selenide.open;
 import static io.restassured.RestAssured.given;
 
 public class VkPostUtil extends VkAPIUtils {
@@ -43,7 +44,7 @@ public class VkPostUtil extends VkAPIUtils {
                 .queryParam("attachments", fullPhotoId)
                 .post(request);
         if (resp.body().asString().contains("Captcha needed")) {
-            BrowserUtil.goTo(JsonPathUtil.getValueByBody(resp.asString(), "captcha_img"));
+            open(JsonPathUtil.getValueByBody(resp.asString(), "captcha_img"));
             String sid = JsonPathUtil.getValueByBody(resp.asString(), "captcha_sid");
             String captcha_img = null;
             try {

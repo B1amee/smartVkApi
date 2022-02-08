@@ -1,10 +1,10 @@
 package tests;
 
-import org.testng.annotations.AfterTest;
+import org.apache.log4j.Logger;
 import org.testng.annotations.BeforeTest;
-import org.testng.log4testng.Logger;
-import utils.BrowserUtil;
 import utils.DataManager;
+
+import static com.codeborne.selenide.Selenide.open;
 
 
 public class BaseTest {
@@ -13,14 +13,7 @@ public class BaseTest {
 
     @BeforeTest
     public void beforeTest() {
-        String url = DataManager.getValue("/url");
-        BrowserUtil.goTo(url);
-        BrowserUtil.waitForPageToLoad();
+        String url = DataManager.getValue("url");
+        open(url);
     }
-
-    @AfterTest
-    public void afterTest() {
-        BrowserUtil.quit();
-    }
-
 }

@@ -22,7 +22,7 @@ public class VkPhotoUtil extends VkAPIUtils {
                 .post(request);
         VkPhotoUpload vkPhotoUpload = JsonPathUtil.getVkPhotoUpload(resp.body().asString(), "response");
         log.info("Url " + vkPhotoUpload.getUploadUrl());
-        File file = new File(DataManager.getValue("/photo_file"));
+        File file = new File(DataManager.getValue("photo_file"));
         try {
             log.info("Upload photo");
             resp = given()

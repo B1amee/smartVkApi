@@ -1,31 +1,19 @@
 package utils;
 
-import aquality.selenium.core.logging.Logger;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
-import models.photo.VkPhoto;
-import models.photo.VkPhotoPost;
-import models.photo.VkPhotoUpload;
-import models.VkPost;
+import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import static io.restassured.RestAssured.*;
+import static io.restassured.RestAssured.requestSpecification;
 
 abstract class VkAPIUtils {
 
-    protected static String url = DataManager.getValue("/api_url");
-    protected static String token = DataManager.getValue("/token");
-    protected static String ownerId = DataManager.getValue("/owner_id");
-    protected static String v = DataManager.getValue("/v");
+    protected static String url = DataManager.getValue("api_url");
+    protected static String token = DataManager.getValue("token");
+    protected static String ownerId = DataManager.getValue("owner_id");
+    protected static String v = DataManager.getValue("v");
 
-    protected static final Logger log = Logger.getInstance();
+    protected static final Logger log = Logger.getLogger(JsonPathUtil.class);
 
     static {
         log.info("Init VkApi " + VkAPIUtils.url);

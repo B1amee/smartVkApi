@@ -1,11 +1,11 @@
 {
   "url": "https://vk.com/",
   "api_url": "https://api.vk.com/method",
-  "token": "1f11fa5fa4608ad3114481b87f8169405f14d4523b61be7f5a04c67e6c6429ac6fc35df61d3baeb2b7df6",
+  "token": "9136c84772bbfbcdec5043067e1651525f040caaacfbd1e1a1096deb55a1738d55679037b87b566bfb616",
   "photo_file": "./src/test/resources/photo.jpg",
   "v": "5.131",
   "owner_id": "627657327",
-  "login": "",
-  "password": "",
+  "login": "+375291660762",
+  "password": "PuV6j_.2&$m9h?UYY",
   "letter_count": "10"
 }
