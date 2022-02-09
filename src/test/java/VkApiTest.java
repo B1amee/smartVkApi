@@ -1,5 +1,3 @@
-package tests;
-
 import forms.FeedPage;
 import forms.MyPage;
 import forms.WelcomePage;
