@@ -5,7 +5,8 @@ import models.photo.VkPhoto;
 import models.photo.VkPhotoPost;
 import models.photo.VkPhotoUpload;
 import models.VkPost;
-import org.testng.log4testng.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.List;
@@ -16,7 +17,7 @@ import static io.restassured.path.json.JsonPath.*;
 
 public class JsonPathUtil {
 
-    private static final Logger log = Logger.getLogger(JsonPathUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(JsonPathUtil.class);
 
     public static String getValueByBody(String body, String key) {
         log.info("Get " + key + " id from " + body);

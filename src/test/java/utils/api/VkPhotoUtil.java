@@ -1,8 +1,10 @@
-package utils;
+package utils.api;
 
 import models.photo.VkPhoto;
 import models.photo.VkPhotoPost;
 import models.photo.VkPhotoUpload;
+import utils.DataManager;
+import utils.JsonPathUtil;
 
 import java.io.File;
 import java.net.MalformedURLException;

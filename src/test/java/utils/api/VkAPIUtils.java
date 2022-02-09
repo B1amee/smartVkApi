@@ -1,8 +1,10 @@
-package utils;
+package utils.api;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import utils.DataManager;
 
 import static io.restassured.RestAssured.requestSpecification;
 
@@ -13,7 +15,7 @@ abstract class VkAPIUtils {
     protected static String ownerId = DataManager.getValue("owner_id");
     protected static String v = DataManager.getValue("v");
 
-    protected static final Logger log = Logger.getLogger(JsonPathUtil.class);
+    protected static final Logger log = LoggerFactory.getLogger(VkAPIUtils.class);
 
     static {
         log.info("Init VkApi " + VkAPIUtils.url);
