@@ -12,7 +12,7 @@ public class TextBox  extends BaseElement{
         return findElement().getText();
     }
 
-    public void type (String str) {
+    public void type(String str) {
         findElement().setValue(str);
     }
 }

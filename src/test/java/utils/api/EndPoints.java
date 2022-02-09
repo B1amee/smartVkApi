@@ -1,4 +1,4 @@
-package utils;
+package utils.api;
 
 public enum EndPoints {
     WALL_POST("/wall.post?"),

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
 import utils.DataManager;
 import utils.OpenCvUtil;
+import utils.ReportingPortalApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,7 +43,7 @@ public class VkApiTest extends BaseTest {
 
         log.info("Step 4: Using API request, create Post with random text and get post id from response");
         String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        VkPost vkPost = myPage.createPost(randomText);
+        VkPost vkPost = ReportingPortalApi.createPost(randomText);
         assertNotNull(vkPost, "Post do not created");
         log.info("Step 4: complete");
 
@@ -57,8 +58,8 @@ public class VkApiTest extends BaseTest {
 
         log.info("Step 6: Edit post with API request, change text and add new photo in the post");
         randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        VkPhoto expPhoto = myPage.savePhoto().get(0);
-        myPage.editPost(vkPost, randomText, expPhoto);
+        VkPhoto expPhoto = ReportingPortalApi.savePhoto().get(0);
+        ReportingPortalApi.editPost(vkPost, randomText, expPhoto);
         log.info("Step 6: complete");
 
         log.info("Step 7: Make sure to change text and added uploading photo(make sure the photo are the same), without refresh the page");
@@ -73,7 +74,7 @@ public class VkApiTest extends BaseTest {
 
         log.info("Step 8: Using API request, create comment with random text");
         randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        myPage.createComment(vkPost, randomText);
+        ReportingPortalApi.createComment(vkPost, randomText);
         log.info("Step 8: complete");
 
         log.info("Step 9: Make sure that a comment from the correct user has been added to the desired post, without refresh the page");
@@ -87,12 +88,12 @@ public class VkApiTest extends BaseTest {
         log.info("Step 10: complete");
 
         log.info("Step 1: Make sure that a like from the correct user has been find to the desired post");
-        List<String> likesList = myPage.getLikes(vkPost);
+        List<String> likesList = ReportingPortalApi.getLikes(vkPost);
         assertTrue(likesList.contains(userId), "Likes do not exist user id");
         log.info("Step 11: complete");
 
         log.info("Step 12: Using API request, delete post");
-        assertEquals(myPage.deletePost(vkPost), "1", "Delete post error");
+        assertEquals(ReportingPortalApi.deletePost(vkPost), "1", "Delete post error");
         log.info("Step 12: complete");
 
         log.info("Step 13: Make sure that a post has been deleted, without refresh the page");

@@ -1,13 +1,13 @@
 package utils;
 
-import org.testng.log4testng.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.util.Map;
 
 public class DataManager {
 
-    private static final Logger log = Logger.getLogger(DataManager.class);
+    private static final Logger log = LoggerFactory.getLogger(DataManager.class);
     private static Map<String, String> testData;
     private static String dataFile = "src/test/resources/test_data.json";
 

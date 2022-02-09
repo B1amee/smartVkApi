@@ -1,7 +1,8 @@
-package utils;
+package utils.api;
 
 import models.VkPost;
 import models.photo.VkPhoto;
+import utils.JsonPathUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class VkPostUtil extends VkAPIUtils {
                 .queryParam("owner_id", ownerId)
                 .queryParam("post_id", vkPost.getPostId())
                 .post(request);
-        log.info("Delete post " + resp.asString());
+        log.info("Delete post response: " + resp.asString());
         return JsonPathUtil.getValueByBody(resp.asString(), "response");
     }
 

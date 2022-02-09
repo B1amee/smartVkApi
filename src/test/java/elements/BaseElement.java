@@ -2,7 +2,8 @@ package elements;
 
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -11,7 +12,7 @@ public abstract class BaseElement {
 
     protected final By locator;
     protected final String name;
-    protected final Logger log = Logger.getLogger(this.getClass());
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public BaseElement(By locator, String name) {
         this.locator = locator;
