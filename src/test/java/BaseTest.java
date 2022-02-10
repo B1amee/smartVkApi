@@ -1,7 +1,8 @@
+import framework.utils.ConfigManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
-import utils.DataManager;
+import framework.utils.DataManager;
 
 import static com.codeborne.selenide.Selenide.open;
 
@@ -12,7 +13,7 @@ public class BaseTest {
 
     @BeforeTest
     public void beforeTest() {
-        String url = DataManager.getValue("url");
+        String url = ConfigManager.getValue("url");
         open(url);
     }
 }

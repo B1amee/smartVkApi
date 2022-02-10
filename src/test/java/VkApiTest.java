@@ -1,13 +1,15 @@
-import forms.FeedPage;
-import forms.MyPage;
-import forms.WelcomePage;
-import models.VkPost;
-import models.photo.VkPhoto;
+import framework.utils.*;
+import project.api.VkCommentUtil;
+import project.api.VkLikesUtil;
+import project.api.VkPhotoUtil;
+import project.api.VkPostUtil;
+import project.forms.FeedPage;
+import project.forms.MyPage;
+import project.forms.WelcomePage;
+import project.models.VkPost;
+import project.models.photo.VkPhoto;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.testng.annotations.Test;
-import utils.DataManager;
-import utils.OpenCvUtil;
-import utils.ReportingPortalApi;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,8 +27,8 @@ public class VkApiTest extends BaseTest {
 
 
         log.info("Step 2: Authorize");
-        String login = DataManager.getValue("login");
-        String password = DataManager.getValue("password");
+        String login = CredentialsManager.getValue("login");
+        String password = CredentialsManager.getValue("password");
         welcomePage.setLoginAndPassword(login, password);
         welcomePage.clickSignInBtm();
         FeedPage feedPage = new FeedPage();
@@ -40,24 +42,22 @@ public class VkApiTest extends BaseTest {
         log.info("Step 3: complete");
 
         log.info("Step 4: Using API request, create Post with random text and get post id from response");
-        String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        VkPost vkPost = ReportingPortalApi.createPost(randomText);
+        String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        VkPost vkPost = VkPostUtil.createPost(randomText);
         assertNotNull(vkPost, "Post do not created");
         log.info("Step 4: complete");
 
         log.info("Step 5: Check wall to find new post from correct user, without refresh the page");
-        String userId = DataManager.getValue("owner_id");
-        String fullPostId = myPage.getPostId();
-        String postText = myPage.getPostText();
-        assertEquals(postText, randomText, "Post text not equals");
-        assertTrue(fullPostId.contains(userId) && fullPostId.contains(String.valueOf(vkPost.getPostId())), "Post id is uncorrected");
+        String userId = CredentialsManager.getValue("owner_id");
+        myPage.postInit(vkPost.getPostId());
+        assertTrue(myPage.isPostDisplayed(), "Post id is uncorrected"); //fullPostId.contains(userId) && fullPostId.contains(String.valueOf(vkPost.getPostId())
         assertEquals(myPage.getPostText(), randomText, "Post text not equals");
         log.info("Step 5: complete");
 
         log.info("Step 6: Edit post with API request, change text and add new photo in the post");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        VkPhoto expPhoto = ReportingPortalApi.savePhoto().get(0);
-        ReportingPortalApi.editPost(vkPost, randomText, expPhoto);
+        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        VkPhoto expPhoto = VkPhotoUtil.savePhoto().get(0);
+        VkPostUtil.editPost(vkPost, randomText, expPhoto);
         log.info("Step 6: complete");
 
         log.info("Step 7: Make sure to change text and added uploading photo(make sure the photo are the same), without refresh the page");
@@ -66,18 +66,20 @@ public class VkApiTest extends BaseTest {
         assertTrue(actPhotoId.contains(String.valueOf(expPhoto.getId())), "Photo is incorrect");
         String expPhotoPath = DataManager.getValue("photo_file");
         String actPhotoPath = myPage.getPhotoUrl();
-        assertTrue(OpenCvUtil.checkPhoto(actPhotoPath, expPhotoPath), "Photo src is incorrect");
+        int deviation = Integer.parseInt(DataManager.getValue("deviation"));
+        assertTrue(ImageUtil.isEqualsImages(actPhotoPath, expPhotoPath ,deviation), "Photo src is incorrect");
         myPage.closePhoto();
         log.info("Step 7: complete");
 
         log.info("Step 8: Using API request, create comment with random text");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(DataManager.getValue("letter_count")));
-        ReportingPortalApi.createComment(vkPost, randomText);
+        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        VkCommentUtil.createComment(vkPost, randomText);
         log.info("Step 8: complete");
 
         log.info("Step 9: Make sure that a comment from the correct user has been added to the desired post, without refresh the page");
         myPage.clickCommentBtm();
         String authorId = myPage.getCommentAuthorId();
+        assertTrue(myPage.isCommentDisplayed(), "Comment  do not created");
         assertEquals(authorId, userId, "Author comment id is uncorrected");
         log.info("Step 9: complete");
 
@@ -86,12 +88,12 @@ public class VkApiTest extends BaseTest {
         log.info("Step 10: complete");
 
         log.info("Step 1: Make sure that a like from the correct user has been find to the desired post");
-        List<String> likesList = ReportingPortalApi.getLikes(vkPost);
+        List<String> likesList = VkLikesUtil.getPostLikes(vkPost);
         assertTrue(likesList.contains(userId), "Likes do not exist user id");
         log.info("Step 11: complete");
 
         log.info("Step 12: Using API request, delete post");
-        assertEquals(ReportingPortalApi.deletePost(vkPost), "1", "Delete post error");
+        assertEquals(VkPostUtil.deletePost(vkPost), "1", "Delete post error");
         log.info("Step 12: complete");
 
         log.info("Step 13: Make sure that a post has been deleted, without refresh the page");
