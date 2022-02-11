@@ -1,9 +1,10 @@
-package project.api;
+package project.utils.api;
 
 import project.models.photo.VkPhoto;
 import project.models.photo.VkPhotoPost;
 import project.models.photo.VkPhotoUpload;
 import framework.utils.DataManager;
+import project.utils.VkJsonPathUtil;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -44,5 +45,4 @@ public class VkPhotoUtil extends VkAPIUtils {
                 .post(request);
         return VkJsonPathUtil.getVkPhotos(resp.asString(), "response");
     }
-
 }

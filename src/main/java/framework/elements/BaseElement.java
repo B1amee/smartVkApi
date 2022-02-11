@@ -40,17 +40,17 @@ public abstract class BaseElement {
     }
 
     public String getAttribute(String name) {
-        log.info("Get attribute \"" + name  + "\" from the element \"" + this.name + "\"");
+        log.info("Get attribute \"" + name + "\" from the element \"" + this.name + "\"");
         return findElement().getAttribute(name);
     }
 
     public void waitForExist() {
-        log.info("Wait for exist \"" + name  + "\" from the element \"" + this.name + "\"");
+        log.info("Wait for exist \"" + name + "\" from the element \"" + this.name + "\"");
         findElement().shouldBe(exist);
     }
 
     public void waitForVisible() {
-        log.info("Wait for visible \"" + name  + "\" from the element \"" + this.name + "\"");
+        log.info("Wait for visible \"" + name + "\" from the element \"" + this.name + "\"");
         findElement().shouldBe(visible);
     }
 

@@ -1,7 +1,8 @@
-package project.api;
+package project.utils.api;
 
 import project.models.VkComment;
 import project.models.VkPost;
+import project.utils.VkJsonPathUtil;
 
 import static io.restassured.RestAssured.given;
 

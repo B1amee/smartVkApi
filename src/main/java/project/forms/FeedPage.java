@@ -1,7 +1,7 @@
 package project.forms;
 
-import framework.elements.Button;
 import framework.BaseForm;
+import framework.elements.Button;
 import org.openqa.selenium.By;
 
 public class FeedPage extends BaseForm {

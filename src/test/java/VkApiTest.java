@@ -1,16 +1,17 @@
-import framework.utils.*;
-import project.api.VkCommentUtil;
-import project.api.VkLikesUtil;
-import project.api.VkPhotoUtil;
-import project.api.VkPostUtil;
+import framework.utils.ImageUtil;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+import project.utils.api.VkCommentUtil;
+import project.utils.api.VkLikesUtil;
+import project.utils.api.VkPhotoUtil;
+import project.utils.api.VkPostUtil;
 import project.forms.FeedPage;
 import project.forms.MyPage;
 import project.forms.WelcomePage;
 import project.models.VkComment;
 import project.models.VkPost;
 import project.models.photo.VkPhoto;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,7 +21,8 @@ import static org.testng.Assert.*;
 public class VkApiTest extends BaseTest {
 
     @Test(priority = 1)
-    public void testVkApi() throws IOException {
+    @Parameters({"photo_file", "deviation"})
+    public void testVkApi(String expPhotoPath, int deviation) throws IOException {
         log.info("Step 1: go to https://vk.com/");
         WelcomePage welcomePage = new WelcomePage();
         assertTrue(welcomePage.isDisplayed(), "Welcome Page is not open");
@@ -28,8 +30,6 @@ public class VkApiTest extends BaseTest {
 
 
         log.info("Step 2: Authorize");
-        String login = CredentialsManager.getValue("login");
-        String password = CredentialsManager.getValue("password");
         welcomePage.setLoginAndPassword(login, password);
         welcomePage.clickSignInBtm();
         FeedPage feedPage = new FeedPage();
@@ -43,20 +43,19 @@ public class VkApiTest extends BaseTest {
         log.info("Step 3: complete");
 
         log.info("Step 4: Using API request, create Post with random text and get post id from response");
-        String randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        String randomText = RandomStringUtils.randomAlphabetic(letterCount);
         VkPost vkPost = VkPostUtil.createPost(randomText);
         assertNotNull(vkPost, "Post do not created");
         log.info("Step 4: complete");
 
         log.info("Step 5: Check wall to find new post from correct user, without refresh the page");
-        int userId = Integer.parseInt(CredentialsManager.getValue("owner_id"));
         myPage.postInit(userId, vkPost.getPostId());
         assertTrue(myPage.isPostDisplayed(), "Post id is uncorrected"); //fullPostId.contains(userId) && fullPostId.contains(String.valueOf(vkPost.getPostId())
         assertEquals(myPage.getPostText(), randomText, "Post text not equals");
         log.info("Step 5: complete");
 
         log.info("Step 6: Edit post with API request, change text and add new photo in the post");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        randomText = RandomStringUtils.randomAlphabetic(letterCount);
         VkPhoto expPhoto = VkPhotoUtil.savePhoto().get(0);
         VkPostUtil.editPost(vkPost, randomText, expPhoto);
         log.info("Step 6: complete");
@@ -65,15 +64,13 @@ public class VkApiTest extends BaseTest {
         String actPhotoId = myPage.getPhotoId();
         assertEquals(myPage.getPostText(), randomText, "Edit post text not equals");
         assertTrue(actPhotoId.contains(String.valueOf(expPhoto.getId())), "Photo is incorrect");
-        String expPhotoPath = DataManager.getValue("photo_file");
         String actPhotoPath = myPage.getPhotoUrl();
-        int deviation = Integer.parseInt(DataManager.getValue("deviation"));
-        assertTrue(ImageUtil.isEqualsImages(actPhotoPath, expPhotoPath ,deviation), "Photo src is incorrect");
+        assertTrue(ImageUtil.isEqualsImages(actPhotoPath, expPhotoPath, deviation), "Photo src is incorrect");
         myPage.closePhoto();
         log.info("Step 7: complete");
 
         log.info("Step 8: Using API request, create comment with random text");
-        randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
+        randomText = RandomStringUtils.randomAlphabetic(letterCount);
         VkComment vkComment = VkCommentUtil.createComment(vkPost, randomText);
         log.info("Step 8: complete");
 

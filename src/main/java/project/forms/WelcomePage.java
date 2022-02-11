@@ -1,8 +1,8 @@
 package project.forms;
 
+import framework.BaseForm;
 import framework.elements.Button;
 import framework.elements.TextBox;
-import framework.BaseForm;
 import org.openqa.selenium.By;
 
 public class WelcomePage extends BaseForm {

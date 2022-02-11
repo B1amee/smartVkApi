@@ -1,7 +1,8 @@
-package project.api;
+package project.utils.api;
 
 import project.models.VkPost;
 import project.models.photo.VkPhoto;
+import project.utils.VkJsonPathUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;

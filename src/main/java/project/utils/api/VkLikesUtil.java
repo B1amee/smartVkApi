@@ -1,6 +1,7 @@
-package project.api;
+package project.utils.api;
 
 import project.models.VkPost;
+import project.utils.VkJsonPathUtil;
 
 import java.util.List;
 

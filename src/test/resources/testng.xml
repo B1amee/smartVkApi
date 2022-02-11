@@ -2,6 +2,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true" name="d.vereshchagin-L2/src">
-        <classes/>
+        <parameter name="photo_file" value="./src/main/resources/photo.jpg"/>
+        <parameter name="deviation" value="20"/>
+        <classes>
+            <class name="VkApiTest"/>
+        </classes>
     </test>
 </suite>

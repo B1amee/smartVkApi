@@ -1,4 +1,4 @@
-package project.api;
+package project.utils.api;
 
 import framework.utils.ConfigManager;
 import framework.utils.CredentialsManager;
@@ -6,7 +6,6 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import framework.utils.DataManager;
 
 import static io.restassured.RestAssured.requestSpecification;
 
