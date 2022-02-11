@@ -2,6 +2,8 @@ package framework.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import project.api.VkJsonPathUtil;
+
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -14,7 +16,7 @@ public class DataManager {
     public static String getValue(String key) {
         log.info("Get test data by key: " + key);
         if (data == null || data.isEmpty()) {
-            data = JsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
+            data = VkJsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
         }
         return data.get(key);
     }

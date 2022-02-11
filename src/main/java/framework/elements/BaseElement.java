@@ -21,7 +21,6 @@ public abstract class BaseElement {
 
     public boolean isDisplayed() {
         log.info("Check is element \"" + name + "\" Displayed");
-//        findElement().shouldBe(visible);
         return findElement().isDisplayed();
     }
 
@@ -36,7 +35,7 @@ public abstract class BaseElement {
     }
 
     protected SelenideElement findElement() {
-        log.info("Find the element \"" + name + "\"");
+        log.info("Find the element \"" + name + "\" by xpath " + locator.toString());
         return $(locator);
     }
 

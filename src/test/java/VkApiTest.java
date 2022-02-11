@@ -6,6 +6,7 @@ import project.api.VkPostUtil;
 import project.forms.FeedPage;
 import project.forms.MyPage;
 import project.forms.WelcomePage;
+import project.models.VkComment;
 import project.models.VkPost;
 import project.models.photo.VkPhoto;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -48,8 +49,8 @@ public class VkApiTest extends BaseTest {
         log.info("Step 4: complete");
 
         log.info("Step 5: Check wall to find new post from correct user, without refresh the page");
-        String userId = CredentialsManager.getValue("owner_id");
-        myPage.postInit(vkPost.getPostId());
+        int userId = Integer.parseInt(CredentialsManager.getValue("owner_id"));
+        myPage.postInit(userId, vkPost.getPostId());
         assertTrue(myPage.isPostDisplayed(), "Post id is uncorrected"); //fullPostId.contains(userId) && fullPostId.contains(String.valueOf(vkPost.getPostId())
         assertEquals(myPage.getPostText(), randomText, "Post text not equals");
         log.info("Step 5: complete");
@@ -73,22 +74,22 @@ public class VkApiTest extends BaseTest {
 
         log.info("Step 8: Using API request, create comment with random text");
         randomText = RandomStringUtils.randomAlphabetic(Integer.parseInt(ConfigManager.getValue("letter_count")));
-        VkCommentUtil.createComment(vkPost, randomText);
+        VkComment vkComment = VkCommentUtil.createComment(vkPost, randomText);
         log.info("Step 8: complete");
 
         log.info("Step 9: Make sure that a comment from the correct user has been added to the desired post, without refresh the page");
+        myPage.commentInit(userId, vkComment.getCommentId());
         myPage.clickCommentBtm();
-        String authorId = myPage.getCommentAuthorId();
         assertTrue(myPage.isCommentDisplayed(), "Comment  do not created");
-        assertEquals(authorId, userId, "Author comment id is uncorrected");
+        assertEquals(myPage.getCommentText(), randomText, "Comment text not equals");
         log.info("Step 9: complete");
 
         log.info("Step 10: Like the post through the UI.");
         myPage.clickLikeBtm();
         log.info("Step 10: complete");
 
-        log.info("Step 1: Make sure that a like from the correct user has been find to the desired post");
-        List<String> likesList = VkLikesUtil.getPostLikes(vkPost);
+        log.info("Step 11: Make sure that a like from the correct user has been find to the desired post");
+        List<Integer> likesList = VkLikesUtil.getPostLikes(vkPost);
         assertTrue(likesList.contains(userId), "Likes do not exist user id");
         log.info("Step 11: complete");
 
@@ -97,7 +98,7 @@ public class VkApiTest extends BaseTest {
         log.info("Step 12: complete");
 
         log.info("Step 13: Make sure that a post has been deleted, without refresh the page");
-        assertFalse(myPage.isPostDisplayed(), "Post not delete");
+        assertFalse(myPage.isDeletePostDisplayed(), "Post not delete");
         log.info("Step 13: complete");
     }
 }

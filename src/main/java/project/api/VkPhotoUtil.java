@@ -4,7 +4,6 @@ import project.models.photo.VkPhoto;
 import project.models.photo.VkPhotoPost;
 import project.models.photo.VkPhotoUpload;
 import framework.utils.DataManager;
-import framework.utils.JsonPathUtil;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -22,7 +21,7 @@ public class VkPhotoUtil extends VkAPIUtils {
         resp = given()
                 .queryParam("owner_id", ownerId)
                 .post(request);
-        VkPhotoUpload vkPhotoUpload = JsonPathUtil.getVkPhotoUpload(resp.body().asString(), "response");
+        VkPhotoUpload vkPhotoUpload = VkJsonPathUtil.getVkPhotoUpload(resp.body().asString(), "response");
         log.info("Url " + vkPhotoUpload.getUploadUrl());
         File file = new File(DataManager.getValue("photo_file"));
         try {
@@ -34,7 +33,7 @@ public class VkPhotoUtil extends VkAPIUtils {
         } catch (MalformedURLException e) {
             log.info(e.toString());
         }
-        VkPhotoPost vkPhotoPost = JsonPathUtil.getVkPhoto(resp.asString());
+        VkPhotoPost vkPhotoPost = VkJsonPathUtil.getVkPhoto(resp.asString());
         log.info("Save photo");
         request = String.format("%saccess_token=%s&v=%s", EndPoints.PHOTOS_SAVE_WALL_PHOTO, token, v);
         resp = given()
@@ -43,7 +42,7 @@ public class VkPhotoUtil extends VkAPIUtils {
                 .queryParam("hash", vkPhotoPost.getHash())
                 .queryParam("photo", vkPhotoPost.getPhoto())
                 .post(request);
-        return JsonPathUtil.getVkPhotos(resp.asString(), "response");
+        return VkJsonPathUtil.getVkPhotos(resp.asString(), "response");
     }
 
 }

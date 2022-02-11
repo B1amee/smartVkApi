@@ -13,34 +13,34 @@ public class MyPage extends BaseForm {
 
     private static final By locator = By.xpath("//*[@id='page_wall_posts']//*[contains(@id,'post')]");
 
-    private final String patten = "//*[@id='post%s_%d']%s";
-    private final String ownerId = CredentialsManager.getValue("owner_id");
+    private String commentPattern;
 
     private Label post;
-    private Label content;
     private TextBox postText;
     private Link photo;
     private Button postLikeBtm;
     private Label comment;
+    private TextBox commentText;
     private final Button nextComment = new Button(By.xpath("//*[@class='js-replies_next_label']"), "Next comment button");
     private final Link photoSrc = new Link(By.xpath("//*[@id='pv_photo']//img[@src]"), "Photo src");
-    private final Button photoClose = new Button(By.xpath("//*[@class='pv_close_btn']"), "Photo src");
+    private final Button photoClose = new Button(By.xpath("//*[@class='pv_close_btn']"), "Photo close");
 
     public MyPage() {
         super(locator, "My page");
     }
 
-    public void postInit(int postId) {
+    public void postInit(int ownerId, int postId) {
+        String patten = "//*[@id='post%s_%d']%s";
+        commentPattern = String.format(patten, ownerId, postId, "//*[@id='post%s_%d']%s");
         post = new Label(By.xpath(String.format(patten, ownerId, postId, "")), "First post");
-        content = new Label(By.xpath(String.format(patten, ownerId, postId,  "//*[@class='_post_content']")), "Post content");
-        postText = new TextBox(By.xpath(String.format(patten, ownerId, postId,  "//*[contains(@class,'wall_post_text')]")), "First post text");
+        postText = new TextBox(By.xpath(String.format(patten, ownerId, postId,  "//*[contains(@class,'wall_post_text')]")), "Post text");
         photo = new Link(By.xpath(String.format(patten, ownerId, postId,  "//*[contains(@href,'/photo')]")), "Photo link");
         postLikeBtm = new Button(By.xpath(String.format(patten, ownerId, postId, "//*[contains(@class,'_like_button')]")), "Like button");
-        comment = new Label(By.xpath(String.format(patten, ownerId, postId,  "//*[contains(@id,'post')][1]")), "Comment post");
     }
 
-    public void commentInit(int postId) {
-        comment = new Label(By.xpath(String.format(patten, ownerId, postId,  "")), "Comment post");
+    public void commentInit(int ownerId, int commentId) {
+        comment = new Label(By.xpath(String.format(commentPattern, ownerId, commentId,  "")), "Comment post");
+        commentText = new TextBox(By.xpath(String.format(commentPattern, ownerId, commentId,  "//*[contains(@class,'wall_reply_text')]")), "Comment text");
     }
 
     public String getPostText() {
@@ -60,10 +60,10 @@ public class MyPage extends BaseForm {
         photoClose.click();
     }
 
-    public String getCommentAuthorId() {
-        comment.scrollTo(false);
-        comment.waitForVisible();
-        return comment.getAttribute("data-answering-id");
+    public String getCommentText() {
+        commentText.scrollTo(false);
+        commentText.waitForVisible();
+        return commentText.getText();
     }
 
     public void clickCommentBtm() {
@@ -75,9 +75,14 @@ public class MyPage extends BaseForm {
         postLikeBtm.click();
     }
 
+    public boolean isDeletePostDisplayed() {
+        post.waitForHidden();
+        return post.isDisplayed();
+    }
+
     public boolean isCommentDisplayed() {
-        content.waitForHidden();
-        return content.isDisplayed();
+        comment.waitForVisible();
+        return comment.isDisplayed();
     }
 
     public boolean isPostDisplayed() {

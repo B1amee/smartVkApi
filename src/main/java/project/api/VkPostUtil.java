@@ -2,7 +2,6 @@ package project.api;
 
 import project.models.VkPost;
 import project.models.photo.VkPhoto;
-import framework.utils.JsonPathUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,7 +19,7 @@ public class VkPostUtil extends VkAPIUtils {
                 .queryParam("owner_id", ownerId)
                 .queryParam("message", massage)
                 .post(request);
-        return JsonPathUtil.getVkPost(resp.body().asString(), "response");
+        return VkJsonPathUtil.getVkPost(resp.body().asString(), "response");
     }
 
     public static String deletePost(VkPost vkPost) {
@@ -32,7 +31,7 @@ public class VkPostUtil extends VkAPIUtils {
                 .queryParam("post_id", vkPost.getPostId())
                 .post(request);
         log.info("Delete post response: " + resp.asString());
-        return JsonPathUtil.getValueByBody(resp.asString(), "response");
+        return VkJsonPathUtil.getValueByBody(resp.asString(), "response");
     }
 
     public static void editPost(VkPost vkPost, String massage, VkPhoto vkPhoto) {
@@ -45,8 +44,8 @@ public class VkPostUtil extends VkAPIUtils {
                 .queryParam("attachments", fullPhotoId)
                 .post(request);
         if (resp.body().asString().contains("Captcha needed")) {
-            open(JsonPathUtil.getValueByBody(resp.asString(), "captcha_img"));
-            String sid = JsonPathUtil.getValueByBody(resp.asString(), "captcha_sid");
+            open(VkJsonPathUtil.getValueByBody(resp.asString(), "captcha_img"));
+            String sid = VkJsonPathUtil.getValueByBody(resp.asString(), "captcha_sid");
             String captcha_img = null;
             try {
                 captcha_img = new BufferedReader(new InputStreamReader(System.in)).readLine();

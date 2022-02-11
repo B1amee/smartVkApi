@@ -2,6 +2,7 @@ package framework.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import project.api.VkJsonPathUtil;
 
 import java.nio.file.Path;
 import java.util.Map;
@@ -15,7 +16,7 @@ public class ConfigManager{
     public static String getValue(String key) {
         log.info("Get test data by key: " + key);
         if (config == null || config.isEmpty()) {
-            config = JsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
+            config = VkJsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
         }
         return config.get(key);
     }
