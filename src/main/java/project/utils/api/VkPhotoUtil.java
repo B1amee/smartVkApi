@@ -15,7 +15,7 @@ import static io.restassured.RestAssured.given;
 
 public class VkPhotoUtil extends VkAPIUtils {
 
-    public static List<VkPhoto> savePhoto() {
+    public static List<VkPhoto> savePhoto(String path) {
         log.info("Get upload information ");
         String request = String.format("%saccess_token=%s&v=%s",
                 EndPoints.PHOTOS_GET_UPL_SERVER, token, v);
@@ -24,7 +24,7 @@ public class VkPhotoUtil extends VkAPIUtils {
                 .post(request);
         VkPhotoUpload vkPhotoUpload = VkJsonPathUtil.getVkPhotoUpload(resp.body().asString(), "response");
         log.info("Url " + vkPhotoUpload.getUploadUrl());
-        File file = new File(DataManager.getValue("photo_file"));
+        File file = new File(path);
         try {
             log.info("Upload photo");
             resp = given()

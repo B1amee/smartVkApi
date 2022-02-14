@@ -16,7 +16,7 @@ public class ConfigManager{
     public static String getValue(String key) {
         log.info("Get test data by key: " + key);
         if (config == null || config.isEmpty()) {
-            config = VkJsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
+            config = JsonPathUtil.getMap(Path.of(dataFile).toFile(), "");
         }
         return config.get(key);
     }

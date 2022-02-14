@@ -56,7 +56,7 @@ public class VkApiTest extends BaseTest {
 
         log.info("Step 6: Edit post with API request, change text and add new photo in the post");
         randomText = RandomStringUtils.randomAlphabetic(letterCount);
-        VkPhoto expPhoto = VkPhotoUtil.savePhoto().get(0);
+        VkPhoto expPhoto = VkPhotoUtil.savePhoto(expPhotoPath).get(0);
         VkPostUtil.editPost(vkPost, randomText, expPhoto);
         log.info("Step 6: complete");
 
